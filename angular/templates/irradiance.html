@@ -1,0 +1,9 @@
+<select name="selectApi" id="selectedApi" ng-model="selectedApi">
+  <option value="">---Please Select API---</option>
+  <option ng-repeat="option in apis" value="{{option}}">{{option.name}}</option>
+</select>
+<button ng-click="update()">Fetch Data</button>'
+
+<select name="dataOptions" ng-model="apiData">
+  <option ng-repeat="dataOpt in selectedApi.options" value="{{dataOpt.key}}">{{dataOpt.label}}</option>
+</select>
