@@ -11,6 +11,7 @@ d3.custom.barChart = function module() {
     var dispatch = d3.dispatch('customHover');
     function exports(_selection) {
         _selection.each(function(_data) {
+            debugger
             var chartW = width - margin.left - margin.right,
                 chartH = height - margin.top - margin.bottom;
 

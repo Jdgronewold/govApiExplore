@@ -8,10 +8,12 @@
   >
     <option value="">---Please Select API---</option>
   </select>
+  <input type=text ng-model="input"/>
   <button ng-click="update()">Fetch Data</button>
 
   <select name="dataOptions" ng-model="apiData"
     ng-options="dataOpt.key as dataOpt.label for dataOpt in selectedApi.options"
   >
   </select>
+  <button ng-click="plot()">Plot Data</button>
 </div>

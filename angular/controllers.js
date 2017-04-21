@@ -17,10 +17,18 @@ angular.module('govApi')
 
     $scope.update = function() {
       fetchData.get($scope.input, $scope.selectedApi.url).then(res => {
-        debugger
-        $scope.data = res;
+        if ($scope.selectedApi.name === "Solar") {
+          $scope.dataAll = res.data.outputs;
+        }
       });
     };
 
-    // $scope.update = (d, i) => $scope.data = dependencyHere with another service/function to parse data
-  }]); // a directive will depend on this guy
+    $scope.plot = function() {
+      const dataTemp = $scope.dataAll[$scope.apiData];
+      const dataArray = Object.keys(dataTemp.monthly).map( key => {
+        return dataTemp.monthly[key];
+      });
+      $scope.data = dataArray;
+    };
+
+  }]);

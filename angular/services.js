@@ -22,10 +22,8 @@ angular.module("govApi", []).factory( 'initialData', () => {
 
     let geoCodeUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' +
       location + '.json?access_token=' + key + '&country=us&types=place';
-    debugger
     return $http.get(geoCodeUrl).then(results => {
       let latLng = `&lat=${results.data.features[0].center[1]}&lon=${results.data.features[0].center[0]}`;
-      debugger
       return $http.get(url+latLng);
     });
   };
