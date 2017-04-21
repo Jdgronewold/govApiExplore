@@ -16,7 +16,9 @@ angular.module('govApi')
     };
 
     $scope.update = function() {
+      $scope.loading = 'loading...';
       fetchData.get($scope.input, $scope.selectedApi.url).then(res => {
+        $scope.loading = '';
         if ($scope.selectedApi.name === "Solar") {
           $scope.dataAll = res.data.outputs;
         }
@@ -28,7 +30,10 @@ angular.module('govApi')
       const dataArray = Object.keys(dataTemp.monthly).map( key => {
         return dataTemp.monthly[key];
       });
-      $scope.data = dataArray;
+      console.log($scope.data);
+      $scope.data.push( {id: $scope.input, values: dataArray});
+      console.log($scope.data);
+      // $scope.data =
     };
 
   }]);

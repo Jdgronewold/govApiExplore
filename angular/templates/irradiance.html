@@ -1,4 +1,4 @@
-<div class="form">
+<div class="form-container">
   <select
     name="selectApi"
     id="selectedApi"
@@ -8,9 +8,11 @@
   >
     <option value="">---Please Select API---</option>
   </select>
+  <br>
   <input type=text ng-model="input"/>
   <button ng-click="update()">Fetch Data</button>
-
+  {{loading}}
+  <br>
   <select name="dataOptions" ng-model="apiData"
     ng-options="dataOpt.key as dataOpt.label for dataOpt in selectedApi.options"
   >
