@@ -13,8 +13,6 @@ angular.module('govApi')
         var chartEl = d3.select(element[0]);
 
         scope.$watch('data', (newVals, oldVals) => {
-          debugger
-          console.log(scope);
           chartEl.datum(newVals).call(chart);
         }, true);
       }

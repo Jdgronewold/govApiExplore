@@ -1,7 +1,7 @@
 d3.custom = {};
 
 d3.custom.scatterPlot = function module() {
-    var margin = {top: 20, right: 80, bottom: 40, left: 40},
+    var margin = {top: 20, right: 80, bottom: 40, left: 50},
         width = 600,
         height = 500,
         gap = 0,
@@ -19,11 +19,19 @@ d3.custom.scatterPlot = function module() {
                 .domain([0, 11])
                 .range([0, chartW]);
 
+            var array = d3.range(0, (chartW + margin.left), ((chartW  + margin.left)/12));
+
+            var x2 = d3.scaleOrdinal()
+              .domain([
+                "January", "Feb", "Mar", "Apr", "May", "June", "July",
+                "Aug", "Sept", "Oct", "Nov", "Dec"
+              ])
+              .range(array);
+
             var y1 = d3.scaleLinear()
                 .domain([0, d3.max(_data, (data, i) => { return d3.max(data.values, (d) => d ); })])
                 .range([chartH, 0]);
 
-            debugger
             var ord = d3.scaleOrdinal(d3.schemeCategory10)
                 .domain(_data.map( d => d.id));
 
@@ -40,6 +48,9 @@ d3.custom.scatterPlot = function module() {
                 container.append('g').classed('x-axis-group axis', true);
                 container.append('g').classed('y-axis-group axis', true);
             }
+            if(!_data.length) {
+              svg.selectAll('.location').transition().style('opacity', 0).remove();
+            }
 
             svg.transition().duration(duration)
                 .attr('width', width)
@@ -49,17 +60,29 @@ d3.custom.scatterPlot = function module() {
                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
             svg.select('.x-axis-group.axis')
+                .attr('transform', 'translate(0,' + (chartH) + ')');
+
+            svg.select('.x-axis-group.axis')
                 .transition()
                 .duration(duration)
                 .ease(ease)
-                .attr('transform', 'translate(0,' + (chartH) + ')')
-                .call(d3.axisBottom(x1));
+                .call(d3.axisBottom(x2).ticks(12));
 
             svg.select('.y-axis-group.axis')
                 .transition()
                 .duration(duration)
                 .ease(ease)
                 .call(d3.axisLeft(y1));
+
+            svg.select('.y-axis-group.axis')
+                .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr('x', -150)
+                .attr("y", -50)
+                .attr("dy", "1.2em")
+                .attr("fill", "#000")
+                .style('font-size', 14)
+                .text("Sunlight, kWh/m2/day");
 
             let locations = svg.select('.container-group')
               .selectAll(".location")
@@ -71,7 +94,8 @@ d3.custom.scatterPlot = function module() {
               .attr('class', 'line')
               .attr('d', function(d) { return line(d.values); })
               .style('stroke', function(d) { return ord(d.id); })
-              .style('fill', 'none');
+              .style('fill', 'none')
+              .style('stroke-width', 3);
 
             locations.append("text")
               .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
@@ -80,6 +104,7 @@ d3.custom.scatterPlot = function module() {
               .attr("dy", "0.35em")
               .style("font", "10px sans-serif")
               .text(function(d) { return d.id; });
+
         });
     }
     exports.width = function(_x) {
