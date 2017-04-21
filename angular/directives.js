@@ -1,8 +1,8 @@
-const angular = require('angular');
 
-angular.module('govApi',[])
-  .directive('d3-chart', () => {
-    let chart = d3.custom.scatterPlot();
+angular.module('govApi')
+  .directive('d3Chart', () => {
+    let chart = d3.custom.barChart();
+
 
     return {
       restrict: 'E',
@@ -22,11 +22,11 @@ angular.module('govApi',[])
     };
 
   })
-  .directive('api-form', ['updateForm', (updateForm) => {
+  .directive('apiForm', () => {
     return {
       restrict: 'E',
       replace: true,
-      controller: updateForm,
-      templateURL: './templates/irradiance.html'
+      controller: 'updateForm',
+      templateUrl: './angular/templates/irradiance.html'
     };
-  }]);
+  });

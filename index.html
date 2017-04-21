@@ -2,15 +2,18 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Explore govApi></title>
+    <title>Explore govApi</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script type="text/javascript" src='https://api.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.js'></script>
+    <script type="text/javascript" src="./d3/scatterplot.js"></script>
 </head>
-<script type="text/javascript" src="http://d3js.org/d3.v4.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
 
+</script>
 <body>
 
 <div class="header">
-  <h1>Exploring the Governmental APIs</h1>
+  <h1>Exploring the Government APIs</h1>
 </div>
 
 <div ng-app="govApi">
@@ -19,6 +22,12 @@
         <d3-chart height="options.height" data="data" hovered="hovered(args)"></d3-chart>
     </div>
 </div>
+
+
+
+<script type="text/javascript" src="./angular/services.js"></script>
+<script type="text/javascript" src="./angular/controllers.js"></script>
+<script type="text/javascript" src="./angular/directives.js"></script>
 
 
 </body>

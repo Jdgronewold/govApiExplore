@@ -1,5 +1,4 @@
-const angular = require('angular');
-const MapboxClient = require('mapbox');
+
 
 angular.module("govApi", []).factory( 'initialData', () => {
   const key = '0sbcnz7cfHXoyxxiB83hZOHf53MFkrgegwe5DV7h';
@@ -17,16 +16,17 @@ angular.module("govApi", []).factory( 'initialData', () => {
 .service('fetchData', ['$http', function($http) {
   this.get = function(location, url) {
     let data;
+    location = location.replace(",", '%2C');
+    location = location.replace(" ", '%20');
+    const key = "pk.eyJ1IjoiamRncm9uZXdvbGQiLCJhIjoiY2oxcXFuMmQwMDBoMjMzczBid2Rrb2NrMCJ9.NCne1FYlo0EC38P8hhQBCg";
 
-    const client = new MapboxClient('YOUR_ACCESS_TOKEN');
-    client.geocodeForward(location, function(err, res) {
-      // res is the geocoding result as parsed JSON
-      return res;
-    }).then(results => {
+    let geoCodeUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' +
+      location + '.json?access_token=' + key + '&country=us&types=place';
+    debugger
+    return $http.get(geoCodeUrl).then(results => {
+      let latLng = `&lat=${results.data.features[0].center[1]}&lon=${results.data.features[0].center[0]}`;
       debugger
-      let latLng = `&lat=${results.lat}&lon=${results.long}`;
-      data = $http.get(url+latLng);
+      return $http.get(url+latLng);
     });
-
   };
 }]);
