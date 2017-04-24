@@ -39,8 +39,8 @@ angular.module('govApi')
   }])
   .controller('weatherForm', ['$scope', 'fetchWeather', ($scope, fetchWeather) => {
 
-    $scope.input = "7";
-    $scope.closed = false;
+    $scope.input = "30";
+    $scope.closed = true;
     $scope.sources = [];
     $scope.sourcesDetail = "Show Sources";
     $scope.hideSources = true;
@@ -57,15 +57,14 @@ angular.module('govApi')
     };
 
     $scope.update = function() {
+      $scope.data = [];
       $scope.loading = 'loading...';
       fetchWeather.get($scope.input, $scope.selectedApi.url, $scope.sources)
       .then(openResults => {
         if ($scope.closed) {
           $scope.loading = `Data loaded for open events...`;
-          debugger
           const newUrl = $scope.selectedApi.url + "status=closed&";
           fetchWeather.get($scope.input, newUrl, $scope.sources).then(closedResults => {
-            debugger
             $scope.loading = `Data loaded open and closed events for the last ${$scope.input} days`;
             $scope.dataAll = openResults.concat(closedResults);
           });
@@ -77,19 +76,25 @@ angular.module('govApi')
     };
 
     $scope.plot = function() {
+      $scope.data = [];
 
       let dataTemp = $scope.dataAll.map(event => {
         if ($scope.apiData === "All" || $scope.apiData === event.categories[0].title) {
+          console.log(event);
+          let source = !event.sources.length ?  "unknown" : event.sources[0].id;
+          if (event.categories[0].title === "Temperature Extremes") {
+            event.categories[0].title = "Temp Extremes";
+          }
           return {
             type: event.categories[0].title,
-            date: event.geometries[0].date,
-            source: event.sources[0].id
+            date: event.geometries[event.geometries.length - 1].date,
+            source: source
           };
         }
 
       });
 
-      debugger
+      dataTemp = dataTemp.filter( event => event !== undefined);
       $scope.data.push( ...dataTemp );
     };
 

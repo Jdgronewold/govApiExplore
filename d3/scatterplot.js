@@ -1,43 +1,40 @@
 
-d3.custom.scatterplot = function module() {
-  var margin = {top: 20, right: 80, bottom: 40, left: 50},
-      width = 600,
-      height = 500,
+d3.custom.scatterPlot = function module() {
+  var margin = {top: 20, right: 80, bottom: 40, left: 100},
+      width = 700,
+      height = 600,
       gap = 0,
       ease = d3.easeLinear,
-      title;
+      title,
+      finalDates;
   var svg, duration = 500;
 
   var dispatch = d3.dispatch('customHover');
   function exports(_selection) {
       _selection.each(function(_data) {
+        console.log(_data);
 
           var chartW = width - margin.left - margin.right,
               chartH = height - margin.top - margin.bottom;
+          var dates = d3.extent(_data, (d) => new Date(d.date))
+          console.log(dates);
+          let firstDate = new Date(dates[0]);
+          firstDate = new Date(firstDate.setDate(firstDate.getDate() -1));
+          finalDates = [firstDate, dates[1]];
+          console.log(finalDates);
 
-          var x1 = d3.scaleLinear()
-              .domain([0, 11])
+          var x1 = d3.scaleTime()
+              .domain(finalDates)
               .range([0, chartW]);
-
-          var array = d3.range(0, (chartW + margin.left), ((chartW  + margin.left)/12));
-
-          var x2 = d3.scaleOrdinal()
+          var y1 = d3.scalePoint()
             .domain([
-              "January", "Feb", "Mar", "Apr", "May", "June", "July",
-              "Aug", "Sept", "Oct", "Nov", "Dec"
-            ])
-            .range(array);
-
-          var y1 = d3.scaleLinear()
-              .domain([0, d3.max(_data, (data, i) => { return d3.max(data.values, (d) => d ); })])
-              .range([chartH, 0]);
-
-          var ord = d3.scaleOrdinal(d3.schemeCategory10)
-              .domain(_data.map( d => d.id));
-
-          var line = d3.line()
-              .x(function(d, i) { return x1(i); })
-              .y(function(d) { return y1(d); });
+                "", "Drought", "Dust and Haze", "Earthquakes",
+                "Floods", "Landslides", "Manmade", "Sea and Lake Ice",
+                "Severe Storms", "Snow", "Temp Extremes", "Volcanoes",
+                "Water Color", "Wildfires",
+              ])
+            .range([chartH, 0]);
+          var color = d3.scaleOrdinal(d3.schemeCategory10);
 
           if(!svg) {
               svg = d3.select(this)
@@ -49,7 +46,7 @@ d3.custom.scatterplot = function module() {
               container.append('g').classed('y-axis-group axis', true);
           }
           if(!_data.length) {
-            svg.selectAll('.location').transition().style('opacity', 0).remove();
+            svg.selectAll('.event').transition().style('opacity', 0).remove();
           }
 
           svg.transition().duration(duration)
@@ -66,7 +63,13 @@ d3.custom.scatterplot = function module() {
               .transition()
               .duration(duration)
               .ease(ease)
-              .call(d3.axisBottom(x2).ticks(12));
+              .call(d3.axisBottom(x1)
+                    .tickFormat(d3.timeFormat("%e %b")))
+              .selectAll("text")
+              .style("text-anchor", "end")
+              .attr("dx", "-.9em")
+              .attr("dy", "-.3em")
+              .attr("transform", "rotate(-65)");
 
           svg.select('.y-axis-group.axis')
               .transition()
@@ -76,37 +79,48 @@ d3.custom.scatterplot = function module() {
 
           svg.select('.y-axis-group.axis')
               .append("text")
-              .attr("transform", "rotate(-90)")
-              .attr('x', -150)
-              .attr("y", -50)
-              .attr("dy", "1.2em")
+              .attr("transform", "rotate(90)")
+              .attr('x', 56)
+              .attr("y", -5)
+              // .attr("dy", "5em")
               .attr("fill", "#000")
+              .style("text-anchor", "end")
               .style('font-size', 14)
               .text(title);
 
-          let locations = svg.select('.container-group')
-            .selectAll(".location")
-            .data(_data)
-            .enter().append('g')
-            .attr('class', 'location');
+          let events = svg.select('.container-group')
+            .selectAll(".event")
+            .data(_data);
 
-          locations.append("path")
-            .attr('class', 'line')
-            .attr('d', function(d) { return line(d.values); })
-            .style('stroke', function(d) { return ord(d.id); })
-            .style('fill', 'none')
-            .style('stroke-width', 3)
-            .exit()
+          events.enter()
+            .append("circle")
+            .attr('class', 'event')
+            .attr("r", 3.5)
+            .attr('cx', function(d) {
+              return x1(new Date(d.date)); })
+            .attr('cy', function(d) { return y1(d.type); })
+            .style('fill', function(d) { return color(d.type); });
+
+          events.transition()
+            .ease(ease)
+            .attr("r", 3.5)
+            .attr('cx', function(d) {
+              return x1(new Date(d.date)); })
+            .attr('cy', function(d) { return y1(d.type); })
+            .style('fill', function(d) { return color(d.type); });
+
+            events.exit()
             .transition()
-            .style("opacity", 0);
+            .style("opacity", 0)
+            .remove();
 
-          locations.append("text")
-            .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
-            .attr("transform", function(d, i) { return "translate(" + x1(11) + "," + y1(d.value) + ")"; })
-            .attr("x", 3)
-            .attr("dy", "0.35em")
-            .style("font", "10px sans-serif")
-            .text(function(d) { return d.id; });
+          // events.append("text")
+          //   .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
+          //   .attr("transform", function(d, i) { return "translate(" + x1(11) + "," + y1(d.value) + ")"; })
+          //   .attr("x", 3)
+          //   .attr("dy", "0.35em")
+          //   .style("font", "10px sans-serif")
+          //   .text(function(d) { return d.id; });
 
       });
   }
@@ -115,10 +129,9 @@ d3.custom.scatterplot = function module() {
       title = _x;
       return this;
   };
-  exports.height = function(_x) {
-      if (!arguments.length) return height;
-      height = parseInt(_x);
-      duration = 0;
+  exports.finalDates = function(_x) {
+      if (!arguments.length) return finalDates;
+      finalDates = _x;
       return this;
   };
   exports.ease = function(_x) {

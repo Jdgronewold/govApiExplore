@@ -1,8 +1,8 @@
 
 angular.module('govApi')
   .directive('d3Chart', () => {
-    let chart = d3.custom.linePlot();
-
+    let lineChart = d3.custom.linePlot();
+    let scatterChart = d3.custom.scatterPlot();
     return {
       restrict: 'E',
       replace: true,
@@ -15,9 +15,14 @@ angular.module('govApi')
           // can put a switch statement here to call different
           // charts based on scope.selectedApi.name
           if(scope.selectedApi) {
-            chart.title(scope.selectedApi.label);
+            if(scope.selectedApi.name === "Solar") {
+              lineChart.title(scope.selectedApi.label);
+              chartEl.datum(newVals).call(lineChart);
+            } else if (scope.selectedApi.name === "Weather") {
+              scatterChart.title(scope.selectedApi.label);
+              chartEl.datum(newVals).call(scatterChart);
+            }  
           }
-          chartEl.datum(newVals).call(chart);
         }, true);
       }
     };
