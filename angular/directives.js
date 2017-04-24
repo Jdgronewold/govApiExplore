@@ -1,8 +1,7 @@
 
 angular.module('govApi')
   .directive('d3Chart', () => {
-    let chart = d3.custom.scatterPlot();
-
+    let chart = d3.custom.linePlot();
 
     return {
       restrict: 'E',
@@ -13,17 +12,50 @@ angular.module('govApi')
         var chartEl = d3.select(element[0]);
 
         scope.$watch('data', (newVals, oldVals) => {
+          // can put a switch statement here to call different
+          // charts based on scope.selectedApi.name
+          if(scope.selectedApi) {
+            chart.title(scope.selectedApi.label);
+          }
           chartEl.datum(newVals).call(chart);
         }, true);
       }
     };
 
   })
-  .directive('apiForm', () => {
+  .directive('baseDir', ($compile) => {
+
+    const linker = function(scope, element, attrs) {
+      scope.$watch('selectedApi', (newVal, oldVal) => {
+        if (newVal === oldVal) return;
+        if(oldVal) {
+          element.removeAttr(`dir-${oldVal.name}`);
+        }
+        if(newVal) {
+          element.attr(`dir-${newVal.name}`, true);
+          $compile(element)(scope);
+        }
+      });
+    };
+
     return {
-      restrict: 'E',
+      restrict: 'A',
+      link: linker
+    };
+  })
+  .directive('dirSolar', () => {
+    return {
+      restrict: 'A',
       replace: true,
-      controller: 'updateForm',
+      controller: 'solarForm',
       templateUrl: './angular/templates/irradiance.html'
+    };
+  })
+  .directive('dirWeather', () => {
+    return {
+      restrict: 'A',
+      replace: true,
+      controller: 'weatherForm',
+      templateUrl: './angular/templates/weather.html'
     };
   });

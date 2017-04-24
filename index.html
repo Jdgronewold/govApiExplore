@@ -12,7 +12,7 @@
   <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
   <script type="text/javascript" src='https://api.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.js'></script>
-  <script type="text/javascript" src="./d3/scatterplot.js"></script>
+  <script type="text/javascript" src="./d3/lineplot.js"></script>
 </head>
 
 </script>
@@ -24,7 +24,18 @@
 
 <div ng-app="govApi">
     <div ng-controller="mainCtrl">
-        <api-form></api-form>
+      Type of API:
+      <select
+        name="selectApi"
+        id="selectedApi"
+        class="form"
+        ng-model="selectedApi"
+        ng-change="changeValue(selectedApi)"
+        ng-options="option as option.name for option in apis"
+      >
+        <option value="">---Please Select API---</option>
+      </select>
+        <div base-dir></div>
         <d3-chart height="options.height" data="data" hovered="hovered(args)"></d3-chart>
     </div>
 </div>

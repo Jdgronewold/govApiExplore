@@ -1,22 +1,11 @@
 <div class="form-container">
-  Type of API:
-  <select
-    name="selectApi"
-    id="selectedApi"
-    class="form"
-    ng-model="selectedApi"
-    ng-change="changeValue(selectedApi)"
-    ng-options="option as option.name for option in apis"
-  >
-    <option value="">---Please Select API---</option>
-  </select>
   <br>
   Location:
   <input class="form" type=text ng-model="input"/>
   <button class="form" ng-click="update()">Fetch Data</button>
   {{loading}}
   <br>
-  Type of data: 
+  Type of data:
   <select class="form" name="dataOptions" ng-model="apiData" ng-change="clearPlot()"
     ng-options="dataOpt.key as dataOpt.label for dataOpt in selectedApi.options"
   >
