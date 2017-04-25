@@ -1,31 +1,40 @@
-<div class="form-container">
-  <br>
-  Days since present:
-  <input type="text" class="form" ng-model="input">
-  <br>
-  <button ng-click="toggleSources()">{{sourcesDetail}}</button>
-  <div ng-hide="hideSources">
-    <label ng-repeat="source in selectedApi.sources">
+<div class="weather-form">
+  <div class="form-container">
+    <br>
+    Days since present:
+    <input type="text" class="form" ng-model="input">
+    <br>
+    <button ng-click="toggleSources()">{{sourcesDetail}}</button>
+    <div ng-hide="hideSources">
+      <label ng-repeat="source in selectedApi.sources">
 
-      {{source.title}}
-      <input
-      type="checkbox"
-      ng-model="source.selected"
-      >
-      <br>
-    </label>
+        {{source.title}}
+        <input
+        type="checkbox"
+        ng-model="source.selected"
+        >
+        <br>
+      </label>
+    </div>
+    <br>
+    Include finished events? <input type="checkbox" ng-model="closed">
+    <br>
+    <button class="form" ng-click="update()">Fetch Data</button>
+    {{loading}}
+    <br>
+    Event type:
+    <select class="form" ng-model="apiData" ng-change="updatePlot()"
+      ng-options="dataOpt.type as dataOpt.type for dataOpt in selectedApi.eventTypes">
+    </select>
+    <br>
+    <button class="form" ng-click="plot()">Plot Data</button>
   </div>
-  <br>
-  Include finished events? <input type="checkbox" ng-model="closed">
-  <br>
-  <button class="form" ng-click="update()">Fetch Data</button>
-  {{loading}}
-  <br>
-  Event type:
-  <select class="form" ng-model="apiData" ng-change="updatePlot()"
-    ng-options="dataOpt.type as dataOpt.type for dataOpt in selectedApi.eventTypes">
-  </select>
-  <br>
+  <div class="plot-output">
+    <br>
+    {{eventName}}
+    <br>
+    {{eventDesc}}
+  </div>
 
-  <button class="form" ng-click="plot()">Plot Data</button>
+</div>
 </div>

@@ -9,10 +9,11 @@ angular.module('govApi')
 
     $scope.changeValue = function(api) {
       $scope.selectedApi = api;
+
     };
   }])
   .controller('solarForm', ['$scope',  'fetchSolar', ($scope, fetchSolar) => {
-    $scope.apiData = null;
+    $scope.apiData = "avg_dni";
     $scope.input = "Boulder, CO";
 
     $scope.clearPlot = function() {
@@ -46,6 +47,13 @@ angular.module('govApi')
     $scope.hideSources = true;
     $scope.apiData = 'All';
 
+    $scope.hovered = function(d){
+
+                $scope.eventName = d.name;
+                $scope.eventDesc = d.description;
+                $scope.$apply();
+            };
+
     $scope.toggleSources = function() {
       if ($scope.hideSources) {
         $scope.hideSources = false;
@@ -65,11 +73,11 @@ angular.module('govApi')
           $scope.loading = `Data loaded for open events...`;
           const newUrl = $scope.selectedApi.url + "status=closed&";
           fetchWeather.get($scope.input, newUrl, $scope.sources).then(closedResults => {
-            $scope.loading = `Data loaded open and closed events for the last ${$scope.input} days`;
+            $scope.loading = `Data loaded for the last ${$scope.input} days`;
             $scope.dataAll = openResults.concat(closedResults);
           });
         } else {
-          $scope.loading = `Data loaded for open events for the last ${$scope.input} days`;
+          $scope.loading = `Data loaded for the last ${$scope.input} days`;
           $scope.dataAll = openResults;
         }
       });
@@ -78,9 +86,8 @@ angular.module('govApi')
     $scope.plot = function() {
       $scope.data = [];
 
-      let dataTemp = $scope.dataAll.map(event => {
+      let dataTemp = $scope.dataAll.map( (event, i) => {
         if ($scope.apiData === "All" || $scope.apiData === event.categories[0].title) {
-          console.log(event);
           let source = !event.sources.length ?  "unknown" : event.sources[0].id;
           if (event.categories[0].title === "Temperature Extremes") {
             event.categories[0].title = "Temp Extremes";
@@ -88,20 +95,25 @@ angular.module('govApi')
           return {
             type: event.categories[0].title,
             date: event.geometries[event.geometries.length - 1].date,
-            source: source
+            source: source,
+            key: `${event.categories[0].title}-${i}`,
+            name: event.title.replace(event.categories[0].title, ""),
+            description: event.description
           };
         }
 
       });
 
       dataTemp = dataTemp.filter( event => event !== undefined);
+
       $scope.data.push( ...dataTemp );
     };
-
     $scope.$watch('selectedApi.sources|filter:{selected:true}', function (newVals) {
-      $scope.sources = newVals.map(function (source) {
-        return source.id;
-      });
+      if($scope.selectedApi.name === "Weather"){
+        $scope.sources = newVals.map(function (source) {
+          return source.id;
+        });
+      }
     }, true);
 
   }]);

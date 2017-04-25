@@ -7,21 +7,32 @@ d3.custom.scatterPlot = function module() {
       ease = d3.easeLinear,
       title,
       finalDates;
-  var svg, duration = 500;
+  var svg, tooltip, duration = 500;
 
-  var dispatch = d3.dispatch('customHover');
+  // Don't use scaleOrdinal because on update it doesn't register colors
+  // currently being used on plot
+  var colors = {
+    "Drought": "#8c564b", "Dust and Haze": "#c49c94",
+    "Earthquakes": "#2ca02c", "Floods": "#1f77b4",
+    "Landslides": "#bcbd22", "Manmade": "#7f7f7f",
+    "Sea and Lake Ice": "#e377c2", "Severe Storms": "#9467bd",
+    "Snow": "#aec7e8", "Temp Extremes": "#17becf",
+    "Volcanoes": "#ff7f0e",
+    "Water Color": "#ffbb78", "Wildfires": "#d62728"
+  };
+
+  var dispatcher = d3.dispatch('customHover');
   function exports(_selection) {
       _selection.each(function(_data) {
-        console.log(_data);
 
           var chartW = width - margin.left - margin.right,
               chartH = height - margin.top - margin.bottom;
           var dates = d3.extent(_data, (d) => new Date(d.date))
-          console.log(dates);
+
           let firstDate = new Date(dates[0]);
           firstDate = new Date(firstDate.setDate(firstDate.getDate() -1));
           finalDates = [firstDate, dates[1]];
-          console.log(finalDates);
+
 
           var x1 = d3.scaleTime()
               .domain(finalDates)
@@ -36,18 +47,25 @@ d3.custom.scatterPlot = function module() {
             .range([chartH, 0]);
           var color = d3.scaleOrdinal(d3.schemeCategory10);
 
-          if(!svg) {
+          if(!svg || d3.select('.svgChart').empty()) {
               svg = d3.select(this)
                   .append('svg')
-                  .classed('chart', true);
+                  .classed('svgChart', true);
               var container = svg.append('g').classed('container-group', true);
               container.append('g').classed('chart-group', true);
               container.append('g').classed('x-axis-group axis', true);
               container.append('g').classed('y-axis-group axis', true);
+
+              tooltip = d3.select(".chart")
+              .append('div')
+              .classed('tooltip', true)
+              .style("font-size", '12px')
+              .style('opacity', 0);
           }
           if(!_data.length) {
             svg.selectAll('.event').transition().style('opacity', 0).remove();
           }
+
 
           svg.transition().duration(duration)
               .attr('width', width)
@@ -90,27 +108,52 @@ d3.custom.scatterPlot = function module() {
 
           let events = svg.select('.container-group')
             .selectAll(".event")
-            .data(_data);
+            .data(_data, (d,i) => {
+              return `${d.key}`;
+            });
 
           events.enter()
             .append("circle")
             .attr('class', 'event')
-            .attr("r", 3.5)
+            .attr("r", 5)
             .attr('cx', function(d) {
               return x1(new Date(d.date)); })
             .attr('cy', function(d) { return y1(d.type); })
-            .style('fill', function(d) { return color(d.type); });
+            .style('fill', function(d) { return colors[d.type]; })
+            .on("mouseover", (d) => {
+              dispatcher.call("customHover", this, d);
+            })
+            .on("mouseout",(d) => {
+              const clearData = {name: "", description: ""}
+              dispatcher.call("customHover", this, clearData);
+            });
+
+            // function(d) {
+            //   tooltip.transition()
+            //     .style("opacity", 1);
+            //   tooltip.html(d.name)
+            //     .style("left", (d3.event.pageX + 5) + "px")
+            //     .style("top", (d3.event.pageY -20) + "px");
+            //
+            // }
+            //
+            // function(d) {
+            //     tooltip.transition()
+            //          .duration(500)
+            //          .style("opacity", 0);
 
           events.transition()
             .ease(ease)
             .attr("r", 3.5)
             .attr('cx', function(d) {
               return x1(new Date(d.date)); })
-            .attr('cy', function(d) { return y1(d.type); })
-            .style('fill', function(d) { return color(d.type); });
+            .attr('cy', function(d) { return y1(d.type); });
+            // .style('fill', function(d) { return color(d.type); });
 
             events.exit()
             .transition()
+            .duration(3000)
+            .attr("r", 15)
             .style("opacity", 0)
             .remove();
 
@@ -138,6 +181,10 @@ d3.custom.scatterPlot = function module() {
       if (!arguments.length) return ease;
       ease = _x;
       return this;
+  };
+  exports.on = function() {
+    var value = dispatcher.on.apply(dispatcher, arguments);
+    return value === dispatcher ? exports : value;
   };
   return exports;
 };

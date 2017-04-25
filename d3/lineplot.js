@@ -40,10 +40,10 @@ d3.custom.linePlot = function module() {
                 .x(function(d, i) { return x1(i); })
                 .y(function(d) { return y1(d); });
 
-            if(!svg) {
+            if(!svg || d3.select('.svgChart').empty()) {
                 svg = d3.select(this)
                     .append('svg')
-                    .classed('chart', true);
+                    .classed('svgChart', true);
                 var container = svg.append('g').classed('container-group', true);
                 container.append('g').classed('chart-group', true);
                 container.append('g').classed('x-axis-group axis', true);

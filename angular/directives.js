@@ -10,18 +10,29 @@ angular.module('govApi')
 
       link: (scope, element, attrs) => {
         var chartEl = d3.select(element[0]);
+        scatterChart.on('customHover', function(d) {
+          scope.hovered(d);
+        });
+
+        scope.$watch('selectedApi', (newVals, oldVals) => {
+          scope.loading = "";
+          scope.data = [];
+          while(element[0].firstChild) {
+            element[0].firstChild.remove();
+          }
+        });
 
         scope.$watch('data', (newVals, oldVals) => {
           // can put a switch statement here to call different
           // charts based on scope.selectedApi.name
-          if(scope.selectedApi) {
+          if(scope.selectedApi && scope.data.length > 0) {
             if(scope.selectedApi.name === "Solar") {
               lineChart.title(scope.selectedApi.label);
               chartEl.datum(newVals).call(lineChart);
             } else if (scope.selectedApi.name === "Weather") {
               scatterChart.title(scope.selectedApi.label);
               chartEl.datum(newVals).call(scatterChart);
-            }  
+            }
           }
         }, true);
       }
