@@ -1,0 +1,47 @@
+.form {
+  margin-bottom: 5px;,
+  margin-left: 5px;
+}
+
+.tooltip {
+  position: absolute;
+  width: 200px;
+  height: 28px;
+  pointer-events: none;
+}
+.weather-form-container {
+  flex: 1;
+  flex-wrap: wrap;
+}
+.weather-form {
+  display: flex;
+  flex-direction: row;
+}
+.plot-output {
+  flex: 1;
+}
+
+.stroke {
+    fill: none;
+    stroke: #000;
+    stroke-width: 3px;
+  }
+  .fill {
+    fill: #000;
+  }
+  .graticule {
+    fill: none;
+    stroke: #fff;
+    stroke-width: .5px;
+    stroke-opacity: .5;
+  }
+  .land {
+    fill: #fff;
+    stroke:#777;
+    stroke-width:.75px;
+  }
+  .boundary {
+    fill: none;
+    stroke: #fff;
+    stroke-width: .5px;
+  }

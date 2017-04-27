@@ -4,7 +4,6 @@ d3.custom.linePlot = function module() {
     var margin = {top: 20, right: 80, bottom: 40, left: 50},
         width = 600,
         height = 500,
-        gap = 0,
         ease = d3.easeLinear,
         title;
     var svg, duration = 500;

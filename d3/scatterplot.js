@@ -2,8 +2,7 @@
 d3.custom.scatterPlot = function module() {
   var margin = {top: 20, right: 80, bottom: 40, left: 100},
       width = 700,
-      height = 600,
-      gap = 0,
+      height = 400,
       ease = d3.easeLinear,
       title,
       finalDates;
@@ -34,16 +33,18 @@ d3.custom.scatterPlot = function module() {
           finalDates = [firstDate, dates[1]];
 
 
+
           var x1 = d3.scaleTime()
               .domain(finalDates)
               .range([0, chartW]);
+
           var y1 = d3.scalePoint()
             .domain([
-                "", "Drought", "Dust and Haze", "Earthquakes",
+                "Drought", "Dust and Haze", "Earthquakes",
                 "Floods", "Landslides", "Manmade", "Sea and Lake Ice",
                 "Severe Storms", "Snow", "Temp Extremes", "Volcanoes",
-                "Water Color", "Wildfires",
-              ])
+                "Water Color", "Wildfires", ""
+              ].reverse())
             .range([chartH, 0]);
           var color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -115,7 +116,7 @@ d3.custom.scatterPlot = function module() {
           events.enter()
             .append("circle")
             .attr('class', 'event')
-            .attr("r", 5)
+            .attr("r", 4)
             .attr('cx', function(d) {
               return x1(new Date(d.date)); })
             .attr('cy', function(d) { return y1(d.type); })

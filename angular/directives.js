@@ -3,17 +3,22 @@ angular.module('govApi')
   .directive('d3Chart', () => {
     let lineChart = d3.custom.linePlot();
     let scatterChart = d3.custom.scatterPlot();
+    let globeChart = d3.custom.globe();
+
     return {
       restrict: 'E',
       replace: true,
       template: '<div class="chart"></div>',
 
       link: (scope, element, attrs) => {
+
         var chartEl = d3.select(element[0]);
+        // set up custom event to pass event/data from svg to scope
         scatterChart.on('customHover', function(d) {
           scope.hovered(d);
         });
 
+        // when switching between APIs remove previous svg
         scope.$watch('selectedApi', (newVals, oldVals) => {
           scope.loading = "";
           scope.data = [];
@@ -23,8 +28,8 @@ angular.module('govApi')
         });
 
         scope.$watch('data', (newVals, oldVals) => {
-          // can put a switch statement here to call different
-          // charts based on scope.selectedApi.name
+
+          // right now messes up weather if no points returned
           if(scope.selectedApi && scope.data.length > 0) {
             if(scope.selectedApi.name === "Solar") {
               lineChart.title(scope.selectedApi.label);
@@ -32,6 +37,7 @@ angular.module('govApi')
             } else if (scope.selectedApi.name === "Weather") {
               scatterChart.title(scope.selectedApi.label);
               chartEl.datum(newVals).call(scatterChart);
+              chartEl.datum(newVals).call(globeChart);
             }
           }
         }, true);
