@@ -18,12 +18,26 @@ angular.module('govApi')
           scope.hovered(d);
         });
 
+        globeChart.on('customHover', function(d) {
+          scope.hovered(d);
+        });
+
+        scatterChart.on('customClick', function(d) {
+          scope.clicked(d);
+        });
+
         // when switching between APIs remove previous svg
         scope.$watch('selectedApi', (newVals, oldVals) => {
           scope.loading = "";
           scope.data = [];
           while(element[0].firstChild) {
             element[0].firstChild.remove();
+          }
+        });
+
+        scope.$watch('coords', (newVals) => {
+          if (newVals) {
+            globeChart.zoomClick(newVals);
           }
         });
 

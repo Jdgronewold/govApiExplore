@@ -20,7 +20,7 @@ d3.custom.scatterPlot = function module() {
     "Water Color": "#ffbb78", "Wildfires": "#d62728"
   };
 
-  var dispatcher = d3.dispatch('customHover');
+  var dispatcher = d3.dispatch('customHover', 'customClick');
   function exports(_selection) {
       _selection.each(function(_data) {
 
@@ -125,8 +125,11 @@ d3.custom.scatterPlot = function module() {
               dispatcher.call("customHover", this, d);
             })
             .on("mouseout",(d) => {
-              const clearData = {name: "", description: ""}
+              const clearData = {name: "", description: ""};
               dispatcher.call("customHover", this, clearData);
+            })
+            .on("click", (d) => {
+              dispatcher.call('customClick', this, d);
             });
 
             // function(d) {

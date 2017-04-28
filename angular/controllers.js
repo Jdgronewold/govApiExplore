@@ -47,12 +47,21 @@ angular.module('govApi')
     $scope.hideSources = true;
     $scope.apiData = 'All';
 
-    $scope.hovered = function(d){
+    $scope.hovered = function(d) {
 
-                $scope.eventName = d.name;
-                $scope.eventDesc = d.description;
-                $scope.$apply();
-            };
+      $scope.eventName = d.name;
+      $scope.eventDesc = d.description;
+      $scope.$apply();
+    };
+
+    $scope.clicked = function(d) {
+      if (d.coordType === "Polygon") {
+        $scope.coords = d.coords[0][0];
+      } else {
+        $scope.coords = d.coords;
+      }
+      $scope.$apply();
+    };
 
     $scope.toggleSources = function() {
       if ($scope.hideSources) {
@@ -92,13 +101,20 @@ angular.module('govApi')
           if (event.categories[0].title === "Temperature Extremes") {
             event.categories[0].title = "Temp Extremes";
           }
+
+          if (typeof event.geometries[event.geometries.length - 1].coordinates[0] !== 'number') {
+
+          }
+
           return {
             type: event.categories[0].title,
             date: event.geometries[event.geometries.length - 1].date,
             source: source,
             key: `${event.categories[0].title}-${i}`,
             name: event.title.replace(event.categories[0].title, ""),
-            description: event.description
+            description: event.description,
+            coords: event.geometries[event.geometries.length - 1].coordinates,
+            coordType: event.geometries[event.geometries.length - 1].type
           };
         }
 
