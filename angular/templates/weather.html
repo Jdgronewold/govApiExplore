@@ -1,5 +1,5 @@
 <div class="weather-form">
-  <div class="weather-form-container">
+  <div class="form-container">
     <br>
     Days since present:
     <input type="text" class="form" ng-model="input">
@@ -10,6 +10,7 @@
 
         {{source.title}}
         <input
+          style="margin-top: 10px"
         type="checkbox"
         ng-model="source.selected"
         >
@@ -17,10 +18,15 @@
       </label>
     </div>
     <br>
+    <div>
     Include finished events? <input type="checkbox" ng-model="closed">
+    </div>
     <br>
-    <button class="form" ng-click="update()">Fetch Data</button>
-    {{loading}}
+    <div class="">
+      <button class="form" ng-click="update()">Fetch Data</button>
+      &nbsp; &nbsp;
+      {{loading}}
+    </div>
     <br>
     Event type:
     <select class="form" ng-model="apiData" ng-change="updatePlot()"
@@ -29,12 +35,12 @@
     <br>
     <button class="form" ng-click="plot()">Plot Data</button>
   </div>
-  <div class="plot-output">
+  <!-- <div class="plot-output">
     <br>
     {{eventName}}
     <br>
     {{eventDesc}}
-  </div>
+  </div> -->
 
 </div>
 </div>

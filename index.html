@@ -24,20 +24,24 @@
 </div>
 
 <div ng-app="govApi">
-    <div ng-controller="mainCtrl">
-      Type of API:
-      <select
-        name="selectApi"
-        id="selectedApi"
-        class="form"
-        ng-model="selectedApi"
-        ng-change="changeValue(selectedApi)"
-        ng-options="option as option.name for option in apis"
-      >
-        <option value="">---Please Select API---</option>
-      </select>
+    <div class="content" ng-controller="mainCtrl">
+      <div class="user-input">
+        <label class="api-select" for="selectedApi">
+          Type of API:
+          <select
+          name="selectApi"
+          id="selectedApi"
+          class="form"
+          ng-model="selectedApi"
+          ng-change="changeValue(selectedApi)"
+          ng-options="option as option.name for option in apis"
+          >
+            <option value="">---Please Select API---</option>
+          </select>
+        </label>
         <div base-dir></div>
-        <d3-chart height="options.height" data="data" hovered="hovered(args)"></d3-chart>
+      </div>
+      <d3-chart height="options.height" data="data" hovered="hovered(args)"></d3-chart>
     </div>
 </div>
 

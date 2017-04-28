@@ -1,7 +1,7 @@
 
 d3.custom.scatterPlot = function module() {
   var margin = {top: 20, right: 80, bottom: 40, left: 100},
-      width = 700,
+      width = 500,
       height = 400,
       ease = d3.easeLinear,
       title,
@@ -57,16 +57,26 @@ d3.custom.scatterPlot = function module() {
               container.append('g').classed('x-axis-group axis', true);
               container.append('g').classed('y-axis-group axis', true);
 
-              tooltip = d3.select(".chart")
-              .append('div')
-              .classed('tooltip', true)
-              .style("font-size", '12px')
-              .style('opacity', 0);
+              // tooltip = d3.select(".chart")
+              // .append('div')
+              // .classed('tooltip', true)
+              // .style("font-size", '12px')
+              // .style('opacity', 0);
           }
           if(!_data.length) {
             svg.selectAll('.event').transition().style('opacity', 0).remove();
           }
 
+          svg.append("text")
+            .attr("transform", 'translate(' + chartW + ',' + '15)')
+            .style("font-size", "10")
+            .text("Click on a point to center the globe");
+
+          svg.append("text")
+            .attr("transform", 'translate(' + chartW + ',' + '15)')
+            .attr("dy", "1em")
+            .style("font-size", "10")
+            .text("or drag/zoom to your heart's content");
 
           svg.transition().duration(duration)
               .attr('width', width)

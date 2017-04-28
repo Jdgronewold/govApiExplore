@@ -1,14 +1,22 @@
-<div class="form-container">
-  <br>
-  Location:
-  <input class="form" type=text ng-model="input"/>
-  <button class="form" ng-click="update()">Fetch Data</button>
-  {{loading}}
-  <br>
-  Type of data:
-  <select class="form" name="dataOptions" ng-model="apiData" ng-change="clearPlot()"
-    ng-options="dataOpt.key as dataOpt.label for dataOpt in selectedApi.options"
-  >
-  </select>
-  <button class="form" ng-click="plot()">Plot Data</button>
+<div class="solar-form">
+  <div class="form-container">
+    <br>
+    <label for="location">
+      Location:
+      <input name="loaction" class="form" type=text ng-model="input"/>
+    </label>
+    <br>
+    <div>
+      <button class="form" ng-click="update()">Fetch Data</button>
+      &nbsp; &nbsp;
+      {{loading}}
+    </div>
+    <br>
+    Type of data:
+    <select name="type" class="form" name="dataOptions" ng-model="apiData" ng-change="clearPlot()"
+    ng-options="dataOpt.key as dataOpt.label for dataOpt in selectedApi.options">
+    </select>
+    <br>
+    <button class="form" ng-click="plot()">Plot Data</button>
+  </div>
 </div>

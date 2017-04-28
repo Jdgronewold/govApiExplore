@@ -3,8 +3,8 @@
 
 d3.custom.globe = function module() {
   var margin = {top: 20, right: 80, bottom: 40, left: 100},
-      width = 500,
-      height = 500,
+      width = 400,
+      height = 400,
       scale= 250,
       ease = d3.easeLinear,
       degreeDifferenceX = 0,
@@ -29,7 +29,7 @@ d3.custom.globe = function module() {
 
   var projection = d3.geoOrthographic()
       .scale(200)
-      .translate([250,250])
+      .translate([200,200])
       .center([0,0])
       .rotate([0,0]);
 
@@ -39,12 +39,12 @@ d3.custom.globe = function module() {
   var graticule = d3.geoGraticule();
 
   var rotateScale = d3.scaleLinear()
-    .domain([-500, 0, 500])
+    .domain([-400, 0, 400])
     .range([-180, 0, 180]);
 
   var reverseRotate = d3.scaleLinear()
     .domain([-180, 0, 180])
-    .range([-500, 0, 500]);
+    .range([-400, 0, 400]);
 
   var zoomSettings = d3.zoomIdentity
     .translate(0, 0)
@@ -153,7 +153,6 @@ d3.custom.globe = function module() {
                   d3.mean(d.coords[0], (data) => data[1])
                 ];
 
-                console.log(testCoords);
                 return {
                   type: "Point",
                   coordinates: testCoords,

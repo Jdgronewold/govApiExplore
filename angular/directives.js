@@ -43,7 +43,6 @@ angular.module('govApi')
 
         scope.$watch('data', (newVals, oldVals) => {
 
-          // right now messes up weather if no points returned
           if(scope.selectedApi && scope.data.length > 0) {
             if(scope.selectedApi.name === "Solar") {
               lineChart.title(scope.selectedApi.label);
@@ -53,6 +52,8 @@ angular.module('govApi')
               chartEl.datum(newVals).call(scatterChart);
               chartEl.datum(newVals).call(globeChart);
             }
+          } else if (!newVals.length && scope.dataAll.length) {
+            alert("No data matches the criteria");
           }
         }, true);
       }

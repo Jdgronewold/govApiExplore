@@ -5,6 +5,7 @@ angular.module('govApi')
     $scope.options = {width: 500, height: 300};
     $scope.data = [];
     $scope.apis = initialData;
+    $scope.dataAll = [];
     $scope.selectedApi = null;
 
     $scope.changeValue = function(api) {
@@ -40,7 +41,7 @@ angular.module('govApi')
   }])
   .controller('weatherForm', ['$scope', 'fetchWeather', ($scope, fetchWeather) => {
 
-    $scope.input = "30";
+    $scope.input = "70";
     $scope.closed = true;
     $scope.sources = [];
     $scope.sourcesDetail = "Show Sources";

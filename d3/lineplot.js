@@ -52,6 +52,11 @@ d3.custom.linePlot = function module() {
               svg.selectAll('.location').transition().style('opacity', 0).remove();
             }
 
+            svg.append("text")
+              .attr("transform", 'translate(' + (chartW) + ',' + '15)')
+              .style("font-size", "10")
+              .text("Try adding multiple cities!");
+
             svg.transition().duration(duration)
                 .attr('width', width)
                 .attr('height', height);
