@@ -7,6 +7,7 @@ angular.module('govApi')
     $scope.apis = initialData;
     $scope.dataAll = [];
     $scope.selectedApi = null;
+    $scope.hideDesc = true;
 
     $scope.changeValue = function(api) {
       $scope.selectedApi = api;
@@ -49,7 +50,7 @@ angular.module('govApi')
     $scope.apiData = 'All';
 
     $scope.hovered = function(d) {
-
+      $scope.hideDesc = !$scope.hideDesc;
       $scope.eventName = d.name;
       $scope.eventDesc = d.description;
       $scope.$apply();

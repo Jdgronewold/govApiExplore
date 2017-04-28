@@ -63,6 +63,21 @@ button:hover {
   flex-direction: row;
 }
 
+.hover-holder {
+  height: 200px;
+}
+
+.hover-info {
+  border-radius: 20px;
+  background-color: #fff;
+  margin-top: 10px;
+  padding: 10px;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
 .form-container {
   margin: 20px;
   padding: 10px;

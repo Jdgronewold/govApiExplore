@@ -25,23 +25,34 @@
 
 <div ng-app="govApi">
     <div class="content" ng-controller="mainCtrl">
-      <div class="user-input">
-        <label class="api-select" for="selectedApi">
-          Type of API:
-          <select
-          name="selectApi"
-          id="selectedApi"
-          class="form"
-          ng-model="selectedApi"
-          ng-change="changeValue(selectedApi)"
-          ng-options="option as option.name for option in apis"
-          >
+        <div class="user-input">
+          <label class="api-select" for="selectedApi">
+            Type of API:
+            <select
+            name="selectApi"
+            id="selectedApi"
+            class="form"
+            ng-model="selectedApi"
+            ng-change="changeValue(selectedApi)"
+            ng-options="option as option.name for option in apis"
+            >
             <option value="">---Please Select API---</option>
           </select>
         </label>
         <div base-dir></div>
       </div>
       <d3-chart height="options.height" data="data" hovered="hovered(args)"></d3-chart>
+      <div class="hover-holder">
+        <div class="hover-info" ng-hide="hideDesc">
+          <label for="title">
+            Event Name: {{eventName}}
+          </label>
+          <br>
+          <label for="desc">
+            Event Description: {{eventDesc}}
+          </label>
+        </div>    
+      </div>
     </div>
 </div>
 
