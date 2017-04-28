@@ -76,7 +76,7 @@ angular.module('govApi')
     };
 
     $scope.update = function() {
-      $scope.data = [];
+
       $scope.loading = 'loading...';
       fetchWeather.get($scope.input, $scope.selectedApi.url, $scope.sources)
       .then(openResults => {
