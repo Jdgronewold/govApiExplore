@@ -30,6 +30,7 @@ angular.module('govApi')
         scope.$watch('selectedApi', (newVals, oldVals) => {
           scope.loading = "";
           scope.data = [];
+          scope.dataAll = [];
           while(element[0].firstChild) {
             element[0].firstChild.remove();
           }
