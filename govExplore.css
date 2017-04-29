@@ -6,6 +6,10 @@ input {
   width: 100px;
 }
 
+circle:hover {
+  cursor: pointer;
+}
+
 select {
   width: auto;
 }

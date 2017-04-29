@@ -1,6 +1,6 @@
 # Exploring Government Apis
 
-This is a bare bones web application for users to explore the APIs provided by various governmental resources. Currently only Solar data (https://developer.nrel.gov/docs/solar/solar-resource-v1/) and Weather/Natural Events (https://eonet.sci.gsfc.nasa.gov/eonet-project).
+This is a bare bones web application for users to explore the APIs provided by various governmental resources. Currently only Solar data (https://developer.nrel.gov/docs/solar/solar-resource-v1/) and Weather/Natural Events (https://eonet.sci.gsfc.nasa.gov/eonet-project) are available.
 
 
 ## Features/Technology
